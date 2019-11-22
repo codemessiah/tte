@@ -1667,7 +1667,9 @@ void editorDrawStatusBar(struct a_buf* ab) {
     // Showing up to 20 characters of the filename, followed by the number of lines.
     int len = snprintf(status, sizeof(status), " Editing: %.20s %s", ec.file_name ? ec.file_name : "New file", ec.dirty ? "(modified)" : "");
     int col_size = ec.row && ec.cursor_y <= ec.num_rows - 1 ? col_size = ec.row[ec.cursor_y].size : 0;
-    int r_len = snprintf(r_status, sizeof(r_status), "%d/%d lines  %d/%d cols ", ec.cursor_y + 1 > ec.num_rows ? ec.num_rows : ec.cursor_y + 1, ec.num_rows,
+    int line = ec.cursor_y + 1 > ec.num_rows ? ec.num_rows : ec.cursor_y + 1; // The line the cursor is at
+    int r_len = snprintf(r_status, sizeof(r_status), "%d/%d lines (%.0f%%) %d/%d cols ", line, ec.num_rows,
+        (float)line / ec.num_rows * 100, // Current line out of total lines in file
         ec.cursor_x + 1 > col_size ? col_size : ec.cursor_x + 1, col_size);
     if (len > ec.screen_cols)
         len = ec.screen_cols;
